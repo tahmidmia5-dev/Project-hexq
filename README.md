@@ -1,4 +1,11 @@
-# Project HexQ — n8n workflows
+# Project HexQ
+
+## `bot/`: Telegram AI Chat Bot (Python, recommended)
+A standalone Telegram bot powered by Claude. It needs no n8n and no public webhook. See [`bot/README.md`](bot/README.md).
+
+---
+
+## n8n version
 
 ## `workflows/telegram-ai-chatbot.json` — Telegram AI Chat Bot
 
