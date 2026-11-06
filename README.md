@@ -1,7 +1,7 @@
 # Project HexQ
 
 ## `bot/`: Telegram AI Chat Bot (Python, recommended)
-A standalone Telegram bot powered by Claude. It needs no n8n and no public webhook. See [`bot/README.md`](bot/README.md).
+A standalone Telegram bot powered by Google Gemini (gemini-3.5-flash). It needs no n8n and no public webhook. See [`bot/README.md`](bot/README.md).
 
 ---
 

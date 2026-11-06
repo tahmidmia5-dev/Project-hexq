@@ -1,10 +1,10 @@
-# Telegram AI Chat Bot (Python + Claude)
+# Telegram AI Chat Bot (Python + Gemini)
 
 A standalone bot with no n8n and no webhook. It uses long polling, so it runs anywhere: your laptop, a VPS, or a container.
 
 ```
-Telegram ──poll──► bot.py ──► Claude API (claude-opus-5-5)
-                     │  per-chat history (append-only, cached, auto-compacted)
+Telegram ──poll──► bot.py ──► Gemini API (gemini-3.5-flash)
+                     │  per-chat history (last 30 exchanges)
                      └──► reply (split into ≤4096-char chunks)
 ```
 
@@ -13,17 +13,17 @@ Telegram ──poll──► bot.py ──► Claude API (claude-opus-5-5)
 cd bot
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env        # fill in both tokens
+cp .env.example .env        # fill in both keys
 set -a && . ./.env && set +a
 python bot.py
 ```
-Get the Telegram token from `@BotFather` with `/newbot`. Get the Anthropic key from console.anthropic.com.
+Get the Telegram token from `@BotFather` with `/newbot`. Get the Gemini key from aistudio.google.com: **Get API key** → **Create API key**.
 
 ## Run with Docker
 ```bash
 cd bot
-docker build -t tg-claude-bot .
-docker run -d --restart unless-stopped --env-file .env --name tg-claude-bot tg-claude-bot
+docker build -t tg-gemini-bot .
+docker run -d --restart unless-stopped --env-file .env --name tg-gemini-bot tg-gemini-bot
 ```
 
 ## Commands
@@ -36,17 +36,18 @@ docker run -d --restart unless-stopped --env-file .env --name tg-claude-bot tg-c
 | Var | Default | Notes |
 |---|---|---|
 | `TELEGRAM_BOT_TOKEN` | — | Required |
-| `ANTHROPIC_API_KEY` | — | Required |
-| `BOT_MODEL` | `claude-opus-5-5` | Use `claude-sonnet-5-5` or `claude-haiku-5-5` for lower cost |
-| `BOT_EFFORT` | `low` | Thinking depth: `low` … `max`. Higher values are slower and cost more |
-| `BOT_MAX_TOKENS` | `16000` | Per-reply output cap |
+| `GEMINI_API_KEY` | — | Required (`GOOGLE_API_KEY` also works) |
+| `BOT_MODEL` | `gemini-3.5-flash` | Google lists 3.5 Flash as deprecated. Its replacement is `gemini-3.6-flash` |
+| `BOT_THINKING_LEVEL` | `low` | `minimal` \| `low` \| `medium` \| `high`. Higher is slower and costs more |
+| `BOT_MAX_TOKENS` | `8192` | Per-reply output cap |
+| `BOT_HISTORY_TURNS` | `30` | How many user+bot exchanges each chat remembers |
 | `ALLOWED_USER_IDS` | *(empty = public)* | Comma-separated Telegram user IDs |
 | `SYSTEM_PROMPT` | friendly assistant | The bot's personality and rules |
 
 ## How it behaves
-- **Memory**: each chat keeps its own history. History is never edited, only appended to, so prompt caching stays valid and repeat turns are billed mostly at cache rates. Very long chats are summarised server-side by compaction, so they never overflow the context window.
-- **Memory lives in RAM**: a restart wipes it. If that matters, persist `histories` to Redis or SQLite.
-- **Refusals**: `fallbacks="default"` retries declined requests on a fallback model. If that model also declines, the user gets a polite message.
-- **Errors**: the SDK retries rate limits, 5xx errors and network errors 3 times. If a request still fails, the user gets a friendly message and the failed turn is rolled back, so they can just resend.
+- **Memory**: each chat keeps its own history, capped at the last `BOT_HISTORY_TURNS` exchanges. The model's full replies are stored, including the thought signatures Gemini 3 needs back.
+- **Memory lives in RAM**: a restart wipes it.
+- **Blocked or empty answers**: if a safety block or empty response stops an answer, the user gets a polite message and the turn is dropped.
+- **Errors**: 429 and 5xx errors are retried 4 times with backoff. If a request still fails, the user gets a friendly message and the failed turn is rolled back, so they can just resend.
 - **Concurrency**: different chats are handled in parallel. Messages within one chat are handled in order.
-- **Non-text messages** get a "text only" reply. The typing indicator stays on while Claude is thinking.
+- **Non-text messages** get a "text only" reply. The typing indicator stays on while Gemini is thinking.

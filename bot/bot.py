@@ -1,4 +1,4 @@
-"""Telegram AI chat bot powered by Claude.
+"""Telegram AI chat bot powered by Google Gemini.
 
 Long-polling (no public HTTPS / webhook needed). One conversation per Telegram chat.
 Config comes from environment variables -- see .env.example.
@@ -11,7 +11,8 @@ import logging
 import os
 from collections import defaultdict
 
-import anthropic
+from google import genai
+from google.genai import errors, types
 from telegram import Update
 from telegram.constants import ChatAction
 from telegram.ext import (
@@ -25,15 +26,16 @@ from telegram.ext import (
 logging.basicConfig(
     format="%(asctime)s %(levelname)s %(name)s: %(message)s", level=logging.INFO
 )
-for _name in ("httpx", "httpx2"):
+for _name in ("httpx", "httpx2", "google_genai"):
     logging.getLogger(_name).setLevel(logging.WARNING)
 log = logging.getLogger("bot")
 
 # ---------------------------------------------------------------- config ----
 TELEGRAM_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
-MODEL = os.environ.get("BOT_MODEL", "claude-opus-5-5")
-EFFORT = os.environ.get("BOT_EFFORT", "low")  # chat works well at low effort
-MAX_TOKENS = int(os.environ.get("BOT_MAX_TOKENS", "16000"))
+MODEL = os.environ.get("BOT_MODEL", "gemini-3.5-flash")
+THINKING_LEVEL = os.environ.get("BOT_THINKING_LEVEL", "low")  # minimal | low | medium | high
+MAX_TOKENS = int(os.environ.get("BOT_MAX_TOKENS", "8192"))
+HISTORY_TURNS = int(os.environ.get("BOT_HISTORY_TURNS", "30"))  # user+bot exchanges kept per chat
 ALLOWED_USER_IDS = {
     int(x) for x in os.environ.get("ALLOWED_USER_IDS", "").replace(" ", "").split(",") if x
 }
@@ -45,18 +47,29 @@ SYSTEM_PROMPT = os.environ.get(
 )
 
 TELEGRAM_LIMIT = 4096
-BETAS = [
-    "server-side-fallback-2026-07-01",  # fallbacks="default": retry declined requests on a fallback model
-    "compact-2026-01-12",  # server-side compaction keeps very long chats inside the context window
-]
 
-# Reads ANTHROPIC_API_KEY from the environment. The SDK retries 429/5xx/network errors.
-claude = anthropic.AsyncAnthropic(max_retries=3, timeout=120.0)
+# Reads GEMINI_API_KEY (or GOOGLE_API_KEY) from the environment.
+# Retries rate limits (429) and transient server errors with exponential backoff.
+gemini = genai.Client(
+    http_options=types.HttpOptions(
+        timeout=120_000,  # milliseconds
+        retry_options=types.HttpRetryOptions(
+            attempts=4, http_status_codes=[408, 429, 500, 502, 503, 504]
+        ),
+    )
+)
 
-# chat_id -> message history. Append-only: earlier turns are never edited, which keeps
-# prompt caching and thinking blocks valid. Compaction handles growth server-side.
-histories: dict[int, list[dict]] = defaultdict(list)
+GEN_CONFIG = types.GenerateContentConfig(
+    system_instruction=SYSTEM_PROMPT,
+    max_output_tokens=MAX_TOKENS,
+    thinking_config=types.ThinkingConfig(thinking_level=THINKING_LEVEL),
+)
+
+# chat_id -> conversation history (Gemini Content objects, oldest first).
+histories: dict[int, list[types.Content]] = defaultdict(list)
 locks: dict[int, asyncio.Lock] = defaultdict(asyncio.Lock)
+
+BLOCKED_REPLY = "Sorry, I can't help with that one. Feel free to ask something else."
 
 
 # --------------------------------------------------------------- helpers ----
@@ -92,47 +105,57 @@ async def keep_typing(chat, stop: asyncio.Event) -> None:
             pass
 
 
-async def ask_claude(chat_id: int, user_text: str) -> str:
+def trim_history(history: list[types.Content]) -> None:
+    """Keep the last HISTORY_TURNS exchanges; always start on a user turn."""
+    max_items = HISTORY_TURNS * 2
+    if len(history) > max_items:
+        del history[: len(history) - max_items]
+    while history and history[0].role != "user":
+        history.pop(0)
+
+
+async def ask_gemini(chat_id: int, user_text: str) -> str:
     history = histories[chat_id]
-    history.append({"role": "user", "content": user_text})
+    history.append(types.Content(role="user", parts=[types.Part(text=user_text)]))
     try:
-        response = await claude.beta.messages.create(
-            model=MODEL,
-            max_tokens=MAX_TOKENS,
-            system=SYSTEM_PROMPT,
-            messages=history,
-            output_config={"effort": EFFORT},
-            cache_control={"type": "ephemeral"},  # auto-cache the growing conversation prefix
-            context_management={"edits": [{"type": "compact_20260112"}]},
-            fallbacks="default",
-            betas=BETAS,
+        response = await gemini.aio.models.generate_content(
+            model=MODEL, contents=history, config=GEN_CONFIG
         )
     except Exception:
-        # The request failed, so no model turn references this message: safe to drop it
-        # and let the user simply resend.
+        # The request failed: drop the unanswered message so the user can simply resend.
         history.pop()
         raise
 
-    if response.stop_reason == "refusal":
-        # Whole chain (including fallback) declined. Drop the turn so the chat can continue.
+    # Prompt blocked before any answer was generated.
+    if response.prompt_feedback and response.prompt_feedback.block_reason:
         history.pop()
-        log.info("chat %s refusal: %s", chat_id, response.stop_details)
-        return "Sorry, I can't help with that one. Feel free to ask something else."
+        log.info("chat %s prompt blocked: %s", chat_id, response.prompt_feedback.block_reason)
+        return BLOCKED_REPLY
 
-    # Append the full content (thinking, compaction and fallback blocks included), not just text.
-    history.append(
-        {"role": "assistant", "content": [b.to_dict() for b in response.content]}
-    )
+    candidate = response.candidates[0] if response.candidates else None
+    finish = candidate.finish_reason if candidate else None
+    text = (response.text or "").strip() if candidate else ""
 
-    u = response.usage
+    if not candidate or not candidate.content or (
+        not text and finish != types.FinishReason.STOP
+    ):
+        history.pop()
+        log.info("chat %s no answer (finish=%s)", chat_id, finish)
+        return BLOCKED_REPLY
+
+    # Append the model's full Content (keeps thought signatures Gemini 3 expects back).
+    history.append(candidate.content)
+    trim_history(history)
+
+    u = response.usage_metadata
     log.info(
-        "chat %s req=%s in=%s cache_read=%s cache_write=%s out=%s stop=%s",
-        chat_id, response._request_id, u.input_tokens, u.cache_read_input_tokens,
-        u.cache_creation_input_tokens, u.output_tokens, response.stop_reason,
+        "chat %s model=%s in=%s cached=%s thoughts=%s out=%s finish=%s",
+        chat_id, response.model_version, u and u.prompt_token_count,
+        u and u.cached_content_token_count, u and u.thoughts_token_count,
+        u and u.candidates_token_count, finish,
     )
 
-    text = "\n".join(b.text for b in response.content if b.type == "text").strip()
-    if response.stop_reason == "max_tokens":
+    if finish == types.FinishReason.MAX_TOKENS:
         text += "\n\n[Reply cut off - ask me to continue.]"
     return text or "Sorry, I came up empty. Could you rephrase?"
 
@@ -170,14 +193,13 @@ async def on_text(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     typing = asyncio.create_task(keep_typing(update.effective_chat, stop))
     try:
         async with locks[chat_id]:  # one request at a time per chat keeps history ordered
-            reply = await ask_claude(chat_id, text)
-    except anthropic.RateLimitError:
-        reply = "I'm getting too many requests right now. Please try again in a minute."
-    except anthropic.APIConnectionError:
-        reply = "I couldn't reach my AI service. Please try again shortly."
-    except anthropic.APIStatusError as e:
-        log.error("chat %s API error %s: %s", chat_id, e.status_code, e.message)
-        reply = "Something went wrong on my side. Please try again."
+            reply = await ask_gemini(chat_id, text)
+    except errors.APIError as e:
+        log.error("chat %s Gemini API error %s: %s", chat_id, e.code, e.message)
+        if e.code == 429:
+            reply = "I'm getting too many requests right now. Please try again in a minute."
+        else:
+            reply = "Something went wrong on my side. Please try again."
     except Exception:
         log.exception("chat %s unexpected error", chat_id)
         reply = "Something went wrong on my side. Please try again."
@@ -213,7 +235,7 @@ def main() -> None:
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
     app.add_handler(MessageHandler(~filters.TEXT & ~filters.COMMAND, on_unsupported))
     app.add_error_handler(on_error)
-    log.info("bot starting (model=%s, effort=%s)", MODEL, EFFORT)
+    log.info("bot starting (model=%s, thinking=%s)", MODEL, THINKING_LEVEL)
     app.run_polling(allowed_updates=Update.ALL_TYPES, drop_pending_updates=True)
 
 
