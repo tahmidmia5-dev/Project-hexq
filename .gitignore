@@ -1,3 +1,5 @@
 .venv/
 .env
 __pycache__/
+aqclipz/data/*.db
+aqclipz/data/*.db-*

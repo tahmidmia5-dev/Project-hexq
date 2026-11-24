@@ -1,5 +1,10 @@
 # Project HexQ
 
+## `aqclipz/`: AQ Clipz Lead Engine (Phase 1)
+Researches and scores YouTube creators as clipping-agency leads. Python standard library and SQLite, with no API key needed. See [`aqclipz/README.md`](aqclipz/README.md).
+
+---
+
 ## `bot/`: Telegram AI Chat Bot (Python, recommended)
 A standalone Telegram bot powered by Google Gemini (gemini-3.5-flash). It needs no n8n and no public webhook. See [`bot/README.md`](bot/README.md).
 
