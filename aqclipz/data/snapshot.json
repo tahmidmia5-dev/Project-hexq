@@ -1,10 +1,444 @@
 {
  "version": 1,
- "exported_at": "2026-11-24T16:54:25+00:00",
+ "exported_at": "2026-11-24T16:57:24+00:00",
  "tables": {
-  "leads": [],
-  "evidence": [],
-  "videos": [],
-  "search_history": []
+  "leads": [
+   {
+    "id": 1,
+    "channel_key": "id:UCyaN6mg5u8Cjy2ZI4ikWaug",
+    "channel_id": "UCyaN6mg5u8Cjy2ZI4ikWaug",
+    "handle": "@MyFirstMillionPod",
+    "creator_name": "My First Million",
+    "name_key": "myfirstmillion",
+    "channel_url": "https://www.youtube.com/@MyFirstMillionPod",
+    "subscriber_count": 975000,
+    "niche": "entrepreneurship",
+    "country": "US",
+    "longform_per_month": 11.1,
+    "shorts_per_month": 28.5,
+    "days_since_last_longform": 1,
+    "days_since_last_short": 0,
+    "max_longform_gap_days": 5,
+    "avg_longform_minutes": 58.9,
+    "content_format": "podcast_interview",
+    "quotable_moments": null,
+    "guest_variety": 1,
+    "has_offer": 1,
+    "has_sponsors": 1,
+    "has_business_email": null,
+    "has_website": null,
+    "has_booking_link": null,
+    "website_url": null,
+    "best_sample_video_url": "https://www.youtube.com/watch?v=0_hpTKQqKOQ",
+    "score": 64,
+    "tier": "Possible",
+    "stage": "qualified",
+    "verification_status": "verified",
+    "score_breakdown": "[{\"key\": \"longform_consistency\", \"label\": \"Long-form consistency\", \"points\": 20, \"max\": 20, \"reasons\": [\"11.1 long-form uploads/month\", \"Last long-form upload 1 days ago\"], \"missing\": []}, {\"key\": \"shortform_gap\", \"label\": \"Short-form content gap\", \"points\": 4, \"max\": 25, \"reasons\": [\"28.5 Shorts/month vs 11.1 long-form/month\"], \"missing\": []}, {\"key\": \"clipping_potential\", \"label\": \"Clipping potential\", \"points\": 17, \"max\": 20, \"reasons\": [\"Format: Podcast / interview (guests) (+8)\", \"Average long-form length 59 min (+6)\", \"Multiple speakers or rotating guests (+3)\"], \"missing\": [\"Quotable moments check\"]}, {\"key\": \"business_potential\", \"label\": \"Business potential\", \"points\": 13, \"max\": 15, \"reasons\": [\"Sells an offer (course, coaching, service, product) (+6)\", \"975,000 subscribers (+3)\", \"Sponsors or monetisation visible (+4)\"], \"missing\": []}, {\"key\": \"contact_accessibility\", \"label\": \"Contact accessibility\", \"points\": 0, \"max\": 10, \"reasons\": [], \"missing\": [\"Public business email\", \"Website with contact info\", \"Booking / inquiry link\"]}, {\"key\": \"niche_fit\", \"label\": \"Niche fit\", \"points\": 10, \"max\": 10, \"reasons\": [\"Core niche: Entrepreneurship (+6)\", \"US-based (+4)\"], \"missing\": []}]",
+    "qualification_explanation": "64/100 (Possible). Long-form consistency 20/20: 11.1 long-form uploads/month; Last long-form upload 1 days ago. Short-form content gap 4/25: 28.5 Shorts/month vs 11.1 long-form/month. Clipping potential 17/20: Format: Podcast / interview (guests) (+8); Average long-form length 59 min (+6); Multiple speakers or rotating guests (+3). Business potential 13/15: Sells an offer (course, coaching, service, product) (+6); 975,000 subscribers (+3); Sponsors or monetisation visible (+4). Contact accessibility 0/10: no data. Niche fit 10/10: Core niche: Entrepreneurship (+6); US-based (+4). Missing (scored 0): Quotable moments check, Public business email, Website with contact info, Booking / inquiry link.",
+    "provenance": "{\"subscriber_count\": \"verified\", \"longform_per_month\": \"verified\", \"days_since_last_longform\": \"verified\", \"max_longform_gap_days\": \"verified\", \"shorts_per_month\": \"verified\", \"avg_longform_minutes\": \"verified\", \"country\": \"verified\", \"niche\": \"verified\", \"content_format\": \"verified\", \"guest_variety\": \"verified\", \"has_offer\": \"verified\", \"has_sponsors\": \"verified\"}",
+    "manual_reject": 0,
+    "notes": "Already produced and edited by HubSpot Media (named producer and editor in descriptions), and posts about 28 Shorts a month, so it is unlikely to need an outside clipping agency. Not verified: business email, contact website, booking link, quotable-moments check (needs watching episodes).",
+    "research_provider": "public_feed",
+    "research_warnings": "[\"Country is not available without the YouTube API. Check it manually.\"]",
+    "research_date": "2026-11-24",
+    "created_at": "2026-11-24T16:56:06+00:00",
+    "updated_at": "2026-11-24T16:57:24+00:00"
+   }
+  ],
+  "evidence": [
+   {
+    "id": 1,
+    "lead_id": 1,
+    "url": "https://www.youtube.com/@MyFirstMillionPod/videos",
+    "label": "Channel page (Videos tab)",
+    "source": "fetched",
+    "captured_at": "2026-11-24T16:56:06+00:00"
+   },
+   {
+    "id": 2,
+    "lead_id": 1,
+    "url": "https://www.youtube.com/feeds/videos.xml?playlist_id=UULFyaN6mg5u8Cjy2ZI4ikWaug",
+    "label": "Long-form uploads feed",
+    "source": "fetched",
+    "captured_at": "2026-11-24T16:56:06+00:00"
+   },
+   {
+    "id": 3,
+    "lead_id": 1,
+    "url": "https://www.youtube.com/feeds/videos.xml?playlist_id=UUSHyaN6mg5u8Cjy2ZI4ikWaug",
+    "label": "Shorts feed",
+    "source": "fetched",
+    "captured_at": "2026-11-24T16:56:06+00:00"
+   },
+   {
+    "id": 4,
+    "lead_id": 1,
+    "url": "https://www.youtube.com/@MyFirstMillionPod/about",
+    "label": "Channel About page: country United States; description says hosts Shaan Puri & Sam Parr, produced by HubSpot Media, with guests",
+    "source": "manual",
+    "captured_at": "2026-11-24T16:57:24+00:00"
+   },
+   {
+    "id": 5,
+    "lead_id": 1,
+    "url": "https://www.youtube.com/watch?v=0_hpTKQqKOQ",
+    "label": "Ep 877 (2026-10-28) description: guest Ethan Evans; sponsors Somewhere.com, Mercury, Beehiiv; Hampton paid community; production and editing by HubSpot Media",
+    "source": "manual",
+    "captured_at": "2026-11-24T16:57:24+00:00"
+   }
+  ],
+  "videos": [
+   {
+    "id": 1,
+    "lead_id": 1,
+    "video_id": "H15B1j0SAmI",
+    "kind": "long",
+    "title": "ChatGPT is a goldmine. Here\u2019s where the gold is",
+    "url": "https://www.youtube.com/watch?v=H15B1j0SAmI",
+    "published_at": "2026-11-23T14:00:38+00:00",
+    "views": 41185,
+    "duration_seconds": 3473
+   },
+   {
+    "id": 2,
+    "lead_id": 1,
+    "video_id": "HWBcvNp2wT8",
+    "kind": "long",
+    "title": "Give me 54 minutes and I'll make you disgustingly good at talking to people",
+    "url": "https://www.youtube.com/watch?v=HWBcvNp2wT8",
+    "published_at": "2026-11-20T14:09:26+00:00",
+    "views": 26688,
+    "duration_seconds": 3998
+   },
+   {
+    "id": 3,
+    "lead_id": 1,
+    "video_id": "EAZq8Ly98Ls",
+    "kind": "long",
+    "title": "Proof you don\u2019t need a clever idea to make crazy money",
+    "url": "https://www.youtube.com/watch?v=EAZq8Ly98Ls",
+    "published_at": "2026-11-18T14:00:16+00:00",
+    "views": 50069,
+    "duration_seconds": 5477
+   },
+   {
+    "id": 4,
+    "lead_id": 1,
+    "video_id": "AGwNx57ABfM",
+    "kind": "long",
+    "title": "Gimme 92 minutes and I\u2019ll make you disgustingly fast in business",
+    "url": "https://www.youtube.com/watch?v=AGwNx57ABfM",
+    "published_at": "2026-11-16T14:22:24+00:00",
+    "views": 97560,
+    "duration_seconds": 4804
+   },
+   {
+    "id": 5,
+    "lead_id": 1,
+    "video_id": "GJUZUnJmW6c",
+    "kind": "long",
+    "title": "How to stop watching your life and start living it - Robert Greene",
+    "url": "https://www.youtube.com/watch?v=GJUZUnJmW6c",
+    "published_at": "2026-11-11T14:37:36+00:00",
+    "views": 51774,
+    "duration_seconds": 2301
+   },
+   {
+    "id": 6,
+    "lead_id": 1,
+    "video_id": "scmf3gd9ZjI",
+    "kind": "long",
+    "title": "Building easy AI apps is a bad idea. Here's 8 better bets",
+    "url": "https://www.youtube.com/watch?v=scmf3gd9ZjI",
+    "published_at": "2026-11-09T14:30:01+00:00",
+    "views": 100111,
+    "duration_seconds": 1785
+   },
+   {
+    "id": 7,
+    "lead_id": 1,
+    "video_id": "Sd_Vn1j8qrI",
+    "kind": "long",
+    "title": "These AI-proof businesses can make you $10M/year",
+    "url": "https://www.youtube.com/watch?v=Sd_Vn1j8qrI",
+    "published_at": "2026-11-04T14:30:39+00:00",
+    "views": 83409,
+    "duration_seconds": 4836
+   },
+   {
+    "id": 8,
+    "lead_id": 1,
+    "video_id": "OE32mgQCN6E",
+    "kind": "long",
+    "title": "You NEED to spend all of your money before you die - Bill Perkins",
+    "url": "https://www.youtube.com/watch?v=OE32mgQCN6E",
+    "published_at": "2026-11-02T14:30:04+00:00",
+    "views": 84134,
+    "duration_seconds": 4400
+   },
+   {
+    "id": 9,
+    "lead_id": 1,
+    "video_id": "0_hpTKQqKOQ",
+    "kind": "long",
+    "title": "Ex-Amazon VP: the RUTHLESS reality of working for Jeff Bezos",
+    "url": "https://www.youtube.com/watch?v=0_hpTKQqKOQ",
+    "published_at": "2026-10-28T13:56:17+00:00",
+    "views": 301678,
+    "duration_seconds": 7525
+   },
+   {
+    "id": 10,
+    "lead_id": 1,
+    "video_id": "YdRLpWQARtA",
+    "kind": "long",
+    "title": "$100M founder: how to make millions with non-obvious opportunities",
+    "url": "https://www.youtube.com/watch?v=YdRLpWQARtA",
+    "published_at": "2026-10-26T13:39:41+00:00",
+    "views": 128720,
+    "duration_seconds": 2939
+   },
+   {
+    "id": 11,
+    "lead_id": 1,
+    "video_id": "6geIxfCmRfo",
+    "kind": "long",
+    "title": "2 business ideas, moats and the best stuff we found on X",
+    "url": "https://www.youtube.com/watch?v=6geIxfCmRfo",
+    "published_at": "2026-10-23T13:00:35+00:00",
+    "views": 50410,
+    "duration_seconds": 3220
+   },
+   {
+    "id": 12,
+    "lead_id": 1,
+    "video_id": "VVw5m7IA0no",
+    "kind": "long",
+    "title": "We watched the Elizabeth Holmes doc (and honestly, WTF)",
+    "url": "https://www.youtube.com/watch?v=VVw5m7IA0no",
+    "published_at": "2026-10-20T15:18:43+00:00",
+    "views": 48607,
+    "duration_seconds": 2769
+   },
+   {
+    "id": 13,
+    "lead_id": 1,
+    "video_id": "c7HzTX9CZic",
+    "kind": "long",
+    "title": "How he beat the S&P 500 for 11 years doing (almost) nothing",
+    "url": "https://www.youtube.com/watch?v=c7HzTX9CZic",
+    "published_at": "2026-10-19T13:30:31+00:00",
+    "views": 89802,
+    "duration_seconds": 2236
+   },
+   {
+    "id": 14,
+    "lead_id": 1,
+    "video_id": "DbfcX173pg8",
+    "kind": "long",
+    "title": "You can\u2019t help but print money if you have these 6 traits",
+    "url": "https://www.youtube.com/watch?v=DbfcX173pg8",
+    "published_at": "2026-10-16T13:00:10+00:00",
+    "views": 45905,
+    "duration_seconds": 1933
+   },
+   {
+    "id": 15,
+    "lead_id": 1,
+    "video_id": "buSoAraMSBg",
+    "kind": "long",
+    "title": "Marketing so good, you couldn\u2019t tell it\u2019s a scam",
+    "url": "https://www.youtube.com/watch?v=buSoAraMSBg",
+    "published_at": "2026-10-14T13:00:03+00:00",
+    "views": 27456,
+    "duration_seconds": 1318
+   },
+   {
+    "id": 16,
+    "lead_id": 1,
+    "video_id": "PAZB_WRNLM0",
+    "kind": "short",
+    "title": "From fringe to mainstream.",
+    "url": "https://www.youtube.com/shorts/PAZB_WRNLM0",
+    "published_at": "2026-11-24T15:25:59+00:00",
+    "views": 460,
+    "duration_seconds": null
+   },
+   {
+    "id": 17,
+    "lead_id": 1,
+    "video_id": "IO7aBlyyVjg",
+    "kind": "short",
+    "title": "Inside China\u2019s $400/month fat-loss camps",
+    "url": "https://www.youtube.com/shorts/IO7aBlyyVjg",
+    "published_at": "2026-11-24T00:18:21+00:00",
+    "views": 17347,
+    "duration_seconds": null
+   },
+   {
+    "id": 18,
+    "lead_id": 1,
+    "video_id": "lnyMGkTyfZ8",
+    "kind": "short",
+    "title": "The $40K/month business built for influencers",
+    "url": "https://www.youtube.com/shorts/lnyMGkTyfZ8",
+    "published_at": "2026-11-23T15:28:44+00:00",
+    "views": 29167,
+    "duration_seconds": null
+   },
+   {
+    "id": 19,
+    "lead_id": 1,
+    "video_id": "p3JLhym3iE0",
+    "kind": "short",
+    "title": "The $15M founder who went to work at McDonald\u2019s",
+    "url": "https://www.youtube.com/shorts/p3JLhym3iE0",
+    "published_at": "2026-11-20T21:00:26+00:00",
+    "views": 7415,
+    "duration_seconds": null
+   },
+   {
+    "id": 20,
+    "lead_id": 1,
+    "video_id": "0i5cK09j3Fo",
+    "kind": "short",
+    "title": "Bill Perkins wants to crush your ego.",
+    "url": "https://www.youtube.com/shorts/0i5cK09j3Fo",
+    "published_at": "2026-11-20T16:57:46+00:00",
+    "views": 4180,
+    "duration_seconds": null
+   },
+   {
+    "id": 21,
+    "lead_id": 1,
+    "video_id": "MM901_Ta82A",
+    "kind": "short",
+    "title": "How Sega gave Nvidia six months to survive",
+    "url": "https://www.youtube.com/shorts/MM901_Ta82A",
+    "published_at": "2026-11-19T01:38:45+00:00",
+    "views": 28828,
+    "duration_seconds": null
+   },
+   {
+    "id": 22,
+    "lead_id": 1,
+    "video_id": "ESa_M2VvzR4",
+    "kind": "short",
+    "title": "How Jensen Huang stayed ahead for 10 years",
+    "url": "https://www.youtube.com/shorts/ESa_M2VvzR4",
+    "published_at": "2026-11-17T14:41:59+00:00",
+    "views": 21880,
+    "duration_seconds": null
+   },
+   {
+    "id": 23,
+    "lead_id": 1,
+    "video_id": "fmQGPt2WZlA",
+    "kind": "short",
+    "title": "Is SaaS out?",
+    "url": "https://www.youtube.com/shorts/fmQGPt2WZlA",
+    "published_at": "2026-11-16T16:41:40+00:00",
+    "views": 3852,
+    "duration_seconds": null
+   },
+   {
+    "id": 24,
+    "lead_id": 1,
+    "video_id": "DxlNk2a9pxU",
+    "kind": "short",
+    "title": "What 50 Cent taught Robert Greene about charisma",
+    "url": "https://www.youtube.com/shorts/DxlNk2a9pxU",
+    "published_at": "2026-11-14T23:43:43+00:00",
+    "views": 8630,
+    "duration_seconds": null
+   },
+   {
+    "id": 25,
+    "lead_id": 1,
+    "video_id": "dthfiBlcFU0",
+    "kind": "short",
+    "title": "The secret weapon Trump says helped capture Maduro",
+    "url": "https://www.youtube.com/shorts/dthfiBlcFU0",
+    "published_at": "2026-11-13T22:32:34+00:00",
+    "views": 8765,
+    "duration_seconds": null
+   },
+   {
+    "id": 26,
+    "lead_id": 1,
+    "video_id": "H5LUL3750zk",
+    "kind": "short",
+    "title": "$148: the price of dinner or a diamond.",
+    "url": "https://www.youtube.com/shorts/H5LUL3750zk",
+    "published_at": "2026-11-12T22:03:41+00:00",
+    "views": 48944,
+    "duration_seconds": null
+   },
+   {
+    "id": 27,
+    "lead_id": 1,
+    "video_id": "2BZ38nJ9ItY",
+    "kind": "short",
+    "title": "The billion-dollar app built around one addictive loop",
+    "url": "https://www.youtube.com/shorts/2BZ38nJ9ItY",
+    "published_at": "2026-11-12T18:54:51+00:00",
+    "views": 52470,
+    "duration_seconds": null
+   },
+   {
+    "id": 28,
+    "lead_id": 1,
+    "video_id": "YTEwtezeKik",
+    "kind": "short",
+    "title": "The million-dollar business hiding your private photos",
+    "url": "https://www.youtube.com/shorts/YTEwtezeKik",
+    "published_at": "2026-11-10T22:55:02+00:00",
+    "views": 22402,
+    "duration_seconds": null
+   },
+   {
+    "id": 29,
+    "lead_id": 1,
+    "video_id": "FGT558ApYjU",
+    "kind": "short",
+    "title": "The $10M business built on Facebook Groups",
+    "url": "https://www.youtube.com/shorts/FGT558ApYjU",
+    "published_at": "2026-11-09T17:34:41+00:00",
+    "views": 14797,
+    "duration_seconds": null
+   },
+   {
+    "id": 30,
+    "lead_id": 1,
+    "video_id": "V8SYvZeU174",
+    "kind": "short",
+    "title": "The $15M business built around sharing P&Ls",
+    "url": "https://www.youtube.com/shorts/V8SYvZeU174",
+    "published_at": "2026-11-07T22:35:19+00:00",
+    "views": 9163,
+    "duration_seconds": null
+   }
+  ],
+  "search_history": [
+   {
+    "id": 1,
+    "kind": "research",
+    "query": "https://www.youtube.com/@MyFirstMillionPod",
+    "outcome": "ok",
+    "detail": "My First Million: 15 long-form, 15 Shorts in feeds; score 33 (Reject, provisional until verified)",
+    "lead_id": 1,
+    "created_at": "2026-11-24T16:56:06+00:00"
+   },
+   {
+    "id": 2,
+    "kind": "manual",
+    "query": "https://www.youtube.com/@MyFirstMillionPod",
+    "outcome": "ok",
+    "detail": "Manual verification: country, niche, format, guests, offer, sponsors from About page and Ep 877 description",
+    "lead_id": 1,
+    "created_at": "2026-11-24T16:57:24+00:00"
+   }
+  ]
  }
 }
