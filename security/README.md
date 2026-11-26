@@ -27,9 +27,20 @@ https://f-droid.org/packages/com.termux/
 
 ```bash
 pkg update && pkg upgrade -y
-pkg install -y git curl openssl-tool bind-tools python ffuf
+
+# Core tools (pkg install is all-or-nothing, so install the reliable ones first)
+pkg install -y git curl openssl-tool dnsutils python
+
+# ffuf is optional (only needed for --discover) and lives in tur-repo:
+pkg install -y tur-repo && pkg install -y ffuf
+
 termux-setup-storage   # optional, for saving reports to your phone
 ```
+
+> **Note on Termux package names:** use `dnsutils` (not `bind-tools`) for
+> `dig`, and `ffuf` only installs after adding `tur-repo`. `pkg install`
+> aborts entirely if any single name is invalid, so install core tools
+> separately from optional ones.
 
 Optional heavier tools:
 ```bash
